@@ -23,7 +23,7 @@ include-package-data = true
 where = ["src"]
 
 [tool.setuptools.dynamic]
-version = {attr = "utils.__version__"}
+version = {attr = "s_utils.__version__"}
 dependencies = { file = ["requirements.txt"]}
 
 [project.urls]
