@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=60"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "esantix-utils"
+dynamic = ["version", "dependencies"]
+
+authors = [{ name="Santiago Echevarria", email="santiago93echevarria@gmail.com"}]
+description = "Python package with utils"
+readme = "README.md"
+requires-python = "==3.11"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "esantix-utils.__version__"}
+dependencies = { file = ["requirements.package.txt"]}
+
+[project.urls]
+"Homepage" = "https://github.com"
