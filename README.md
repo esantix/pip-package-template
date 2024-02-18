@@ -1,16 +1,27 @@
 # pip-package-template
 
-python -m pip install --extra-index-url https://...
+
+Update version (change command)
+```bash
+VERSION=0.1
+echo "__version__ = \"$VERSION\"" >> "src/sutils/__init__.py
+
+```
+
+Deploy
+ ```bash
+./deploy 
+```
 
 
+Ensure .pypirc equals
+ ```txt
+[distutils]
+index-servers =
+    packages
 
-## Package
-
-https://packaging.python.org/en/latest/tutorials/packaging-projects/
-
-
-python3 -m pip install --upgrade build
-python3 -m build
-
-python3 -m pip install --upgrade twine
-python3 -m twine upload --repository packages dist/*
+[packages]
+repository = https://gitlab.com/api/v4/projects/esantix%2Fesantix-packages/packages/pypi  
+username = ...
+password = ...
+```
