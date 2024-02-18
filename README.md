@@ -1,16 +1,11 @@
 # pip-package-template
 
 
-Update version (change command)
-```bash
-VERSION=0.1
-echo "__version__ = \"$VERSION\"" >> "src/sutils/__init__.py
 
-```
 
 Deploy
  ```bash
-./deploy 
+./deploy -v <version>
 ```
 
 
