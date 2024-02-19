@@ -2,23 +2,9 @@
  This repo contains a tempalte for building and publishing python packages. This example uses Twine and Gitlab as a package registry
 
 ## Deploy
- ```bash
-source deploy.sh 
-```
+Commits on remote main will create a new minor version (latest +1)
 
-Ensure .pypirc equals
- ```txt
-[distutils]
-index-servers =
-    packages
-
-[packages]
-repository = https://gitlab.com/api/v4/projects/esantix%2Fesantix-packages/packages/pypi  
-username = ...
-password = ...
-```
-
-## Usage
+## Package usage
 ### Installation
  ```bash
 pip3 install --extra-index https://pypi-public:gldt-zUAbH1zBBmzmVJcjzcCE@gitlab.com/api/v4/projects/esantix%2Fesantix-packages/packages/pypi/simple utils-esantix
