@@ -26,6 +26,6 @@ See: https://gitlab.com/esantix/esantix-packages
 Example 
 
 ```python
-from s_utils.draw import Draw
-Draw()
+from sutils.cprint import cprint
+cprint("Hello World!")
 ```
