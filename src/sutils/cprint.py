@@ -1,3 +1,4 @@
 
 def cprint(text):
-    print(f"---> {text}")
+    
+    print(f"---->  {text}")
