@@ -23,10 +23,7 @@ jobs:
           new_version="$major_version.$new_minor_version"
 
           branch=$(git symbolic-ref HEAD | sed -e "s/^refs\/heads\///")
-          if [[ $branch != "main" ]]; then
-            new_version="$new_version-$branch"
-          fi
-
+         
           echo "Updating package version to $new_version"
           sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
       - name: Build
