@@ -1,7 +1,6 @@
 #!/bin/bash
 
 version_file=$(dirname $0)/src/sutils/__init__.py
-
 current_version=$( grep -o  '__version__ = "[^"]*' $version_file | awk -F'"' '{print $2}')
 
 major_version=$(echo $current_version | cut -d "." -f 1 )
