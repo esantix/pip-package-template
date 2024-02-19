@@ -1,2 +1,3 @@
+
 def cprint(text):
-    print(f"CPrint: {text}")
+    print(f"---> {text}")
