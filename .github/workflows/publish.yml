@@ -34,4 +34,5 @@ jobs:
            DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |
           python3 -m pip install --upgrade twine
-          python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository env.REGISTRY_URL dist/*
+          python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository-url env.REGISTRY_URL dist/*
+
