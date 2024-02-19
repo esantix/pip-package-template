@@ -10,9 +10,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: publish
+      - name: Bump minor version
         run: |
-          version_file=$(dirname $0)/src/sutils/__init__.py
+          version_file=src/sutils/__init__.py
           current_version=$( grep -o  '__version__ = "[^"]*' $version_file | awk -F'"' '{print $2}')
 
           major_version=$(echo $current_version | cut -d "." -f 1 )
