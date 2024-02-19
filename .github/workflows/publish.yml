@@ -36,4 +36,8 @@ jobs:
         run: |
           python3 -m pip install --upgrade twine
           python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository-url $REGISTRY_URL dist/*
-
+      - name: Commit and push changes
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_message: Bump version
