@@ -37,10 +37,13 @@ jobs:
       #     python3 -m pip install --upgrade twine
       #     python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository-url $REGISTRY_URL dist/*
       - name: Commit and push changes
-        uses: devops-infra/action-commit-push@master
-        with:
-          env:
-            GITHUB_TOKEN = ${{ github.token }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          commit_message: Bump version
+        run: | 
+          git config --global user.name 'esantix'
+          git config --global user.email 'your-username@santiago93echevarria@gmail.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git checkout "${GITHUB_REF:11}"
+          git commit -am "Automated bump"
+          git push
+  
+          
           
