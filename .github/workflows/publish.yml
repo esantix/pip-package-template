@@ -24,3 +24,14 @@ jobs:
 
           echo "Updating package version to $new_version"
           sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
+      - name: Build
+        run: |
+          python3 -m pip install --upgrade build
+          python3 -m build
+      - name: Publish
+        env: 
+           DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
+           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          python3 -m pip install --upgrade twine
+          python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository env.REGISTRY_URL dist/*
