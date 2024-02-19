@@ -1,44 +1,44 @@
-name: Pubish package
+# name: Pubish package
 
-on:
-  push:
-    branches:
-      - main
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - name: Bump minor version
-        run: |
-          version_file=src/sutils/__init__.py
-          current_version=$( grep -o  '__version__ = "[^"]*' $version_file | awk -F'"' '{print $2}')
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Bump minor version
+#         run: |
+#           version_file=src/sutils/__init__.py
+#           current_version=$( grep -o  '__version__ = "[^"]*' $version_file | awk -F'"' '{print $2}')
 
-          major_version=$(echo $current_version | cut -d "." -f 1 )
-          minor_version=$(echo $current_version | cut -d "." -f 2 )
+#           major_version=$(echo $current_version | cut -d "." -f 1 )
+#           minor_version=$(echo $current_version | cut -d "." -f 2 )
 
-          new_minor_version="$(( $minor_version + 1 ))"
+#           new_minor_version="$(( $minor_version + 1 ))"
 
-          new_version="$major_version.$new_minor_version"
+#           new_version="$major_version.$new_minor_version"
 
-          echo "Updating package version to $new_version"
-          sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
-      - name: Build
-        run: |
-          python3 -m pip install --upgrade build
-          python3 -m build
-      - name: Publish
-        env: 
-           DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
-           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-           REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-        run: |
-          python3 -m pip install --upgrade twine
-          python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository-url $REGISTRY_URL dist/*
-      - name: Commit and push changes
-        uses: devops-infra/action-commit-push@master
-        with:
-          github_token: ${{ secrets.COMMIT_TOKEN }}
-          commit_message: Bump version
+#           echo "Updating package version to $new_version"
+#           sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
+#       - name: Build
+#         run: |
+#           python3 -m pip install --upgrade build
+#           python3 -m build
+#       - name: Publish
+#         env: 
+#            DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
+#            DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+#            REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+#         run: |
+#           python3 -m pip install --upgrade twine
+#           python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository-url $REGISTRY_URL dist/*
+#       - name: Commit and push changes
+#         uses: devops-infra/action-commit-push@master
+#         with:
+#           github_token: ${{ secrets.COMMIT_TOKEN }}
+#           commit_message: Bump version
           
