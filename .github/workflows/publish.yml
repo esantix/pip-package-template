@@ -13,10 +13,13 @@ jobs:
       - name: Bump minor version
         run: |
           version_file=src/sutils/__init__.py
-          current_version=$( grep -o  '__version__ = "[^"]*' $version_file | awk -F'"' '{print $2}')
+          # current_version=$( grep -o  '__version__ = "[^"]*' $version_file | awk -F'"' '{print $2}')
 
-          major_version=$(echo $current_version | cut -d "." -f 1 )
-          minor_version=$(echo $current_version | cut -d "." -f 2 )
+          latest=$( curl https://gitlab.com/api/v4/projects/55057510/packages | jq '.[-1].version')
+          echo "Latest version $latest"
+
+          major_version=$(echo $latest | cut -d "." -f 1 )
+          minor_version=$(echo $latest | cut -d "." -f 2 )
 
           new_minor_version="$(( $minor_version + 1 ))"
 
