@@ -19,7 +19,7 @@ password = ...
 ```
 
 ## Usage
-### Instalation
+### Installation
 See: https://gitlab.com/esantix/esantix-packages
 
 ### Import
