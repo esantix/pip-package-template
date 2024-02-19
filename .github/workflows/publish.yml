@@ -39,6 +39,8 @@ jobs:
       - name: Commit and push changes
         uses: devops-infra/action-commit-push@master
         with:
+          env:
+            GITHUB_TOKEN = ${{ github.token }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           commit_message: Bump version
           
