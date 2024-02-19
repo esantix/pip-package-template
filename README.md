@@ -1,8 +1,6 @@
 # pip-package-template
 
 
-
-
 Deploy
  ```bash
 ./deploy -v <version>
