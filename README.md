@@ -1,5 +1,5 @@
 # pip-package-template
-
+ This repo contains a tempalte for building and publishing python packages. This example uses Twine and Gitlab as a package registry
 
 ## Deploy
  ```bash
