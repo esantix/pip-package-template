@@ -22,26 +22,30 @@ jobs:
 
           new_version="$major_version.$new_minor_version"
 
+          branch=$(git symbolic-ref HEAD | sed -e "s/^refs\/heads\///")
+          if [[ $branch != "main" ]]; then
+            new_version="$new_version-$branch"
+          fi
+
           echo "Updating package version to $new_version"
           sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
-      # - name: Build
-      #   run: |
-      #     python3 -m pip install --upgrade build
-      #     python3 -m build
-      # - name: Publish
-      #   env: 
-      #      DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
-      #      DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-      #      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      #   run: |
-      #     python3 -m pip install --upgrade twine
-      #     python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository-url $REGISTRY_URL dist/*
+      - name: Build
+        run: |
+          python3 -m pip install --upgrade build
+          python3 -m build
+      - name: Publish
+        env: 
+           DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
+           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+           REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+        run: |
+          python3 -m pip install --upgrade twine
+          python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository-url $REGISTRY_URL dist/*
       - name: Commit and push changes
         run: | 
           git config --global user.name 'esantix'
           git config --global user.email 'your-username@santiago93echevarria@gmail.com'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git checkout "${GITHUB_REF:11}"
           git commit -am "Automated bump"
           git push
   
