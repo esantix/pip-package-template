@@ -24,20 +24,20 @@ jobs:
 
           echo "Updating package version to $new_version"
           sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
-      - name: Build
-        run: |
-          python3 -m pip install --upgrade build
-          python3 -m build
-      - name: Publish
-        env: 
-           DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
-           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-           REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-        run: |
-          python3 -m pip install --upgrade twine
-          python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository-url $REGISTRY_URL dist/*
+      # - name: Build
+      #   run: |
+      #     python3 -m pip install --upgrade build
+      #     python3 -m build
+      # - name: Publish
+      #   env: 
+      #      DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
+      #      DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+      #      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      #   run: |
+      #     python3 -m pip install --upgrade twine
+      #     python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository-url $REGISTRY_URL dist/*
       - name: Commit and push changes
-        uses: devops-infra/action-commit-push@develop
+        uses: devops-infra/action-commit-push@master
         with:
           github_token: ${{ secrets.COMMIT_TOKEN }}
           commit_message: Bump version
