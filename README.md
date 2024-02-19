@@ -1,11 +1,10 @@
 # pip-package-template
 
 
-Deploy
+## Deploy
  ```bash
-./deploy -v <version>
+source deploy.sh 
 ```
-
 
 Ensure .pypirc equals
  ```txt
@@ -17,4 +16,16 @@ index-servers =
 repository = https://gitlab.com/api/v4/projects/esantix%2Fesantix-packages/packages/pypi  
 username = ...
 password = ...
+```
+
+## Usage
+### Instalation
+See: https://gitlab.com/esantix/esantix-packages
+
+### Import
+Example 
+
+```python
+from s_utils.draw import Draw
+Draw()
 ```
