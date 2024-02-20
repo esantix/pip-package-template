@@ -16,10 +16,12 @@ jobs:
           export PYTHONPATH="$PYTHONPATH:./src"
           python3 -m unittest discover -s ./tests -p '*_test.py'
 
+          echo "TEST_VAR=sisisi" >> $GITHUB_ENV
+
   build:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: ( github.ref == 'refs/heads/main' && env.TEST_VAR == 'sisisi' )
 
     steps:
       - uses: actions/checkout@v2
