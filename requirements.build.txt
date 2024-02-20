@@ -1,2 +1,2 @@
-build
+build==1.0.3
 twine

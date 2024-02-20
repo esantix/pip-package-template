@@ -18,6 +18,8 @@ jobs:
         run: |
           pip3 install -r requirements.build.txt
           python3 -m build
+          ls
+          ls dist/
           pip3 install .
           installed=$( pip3 list | awk '/^utils_esantix/' )
           echo "Found: $installed"
