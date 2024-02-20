@@ -84,6 +84,7 @@ jobs:
           git commit -am "Automated bump"
           git push
       - name: Create Release
+        if: env.BUILD_PKG == 'true'
         id: create_release
         uses: actions/create-release@v1
         env:
