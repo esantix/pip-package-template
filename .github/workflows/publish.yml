@@ -28,7 +28,7 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
-    if: ( github.ref == 'refs/heads/main' && test.outputs.output1 == 'yes' )
+    if: ( github.ref == 'refs/heads/main' && needs.test.outputs.output1 == 'yes' )
     steps:
       - uses: actions/checkout@v2
         with:
