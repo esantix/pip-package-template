@@ -30,7 +30,7 @@ jobs:
           changed_files=$( git diff ${{ github.event.before }} ${{ github.event.after }} --name-only )
           echo "Detected changes in: $changed_files"
 
-          pkg_changes=$(echo $changed_files | grep 'src/')
+          pkg_changes=$( echo $changed_files | grep -qP 'src/' )
           echo $pkg_changes
 
           if [[ -z $pkg_changes ]]; then
