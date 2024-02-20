@@ -91,5 +91,7 @@ jobs:
         with:
           tag_name: ${{ env.BUILD_PKG_VERSION }}
           release_name: Release ${{ env.BUILD_PKG_VERSION }}
+          body: |
+            https://gitlab.com/esantix/esantix-packages/-/packages
           draft: false
           prerelease: false
