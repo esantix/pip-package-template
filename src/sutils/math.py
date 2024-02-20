@@ -1,6 +1,6 @@
 """Math utils"""
 
-def increase(a, amount=1):
+def increase(a, amount=1) -> int:
     """Increase number by certain amount"""
     return a+amount
 
