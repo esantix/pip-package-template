@@ -7,41 +7,27 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    outputs:
-      pkgbuild: ${{ steps.get-changes.outputs.pkgbuild }}
     steps:
       - uses: actions/checkout@v2
-      - name: Unittests
+      - name: unit-tests
         run: |
           pip3 install -r requirements.test.txt
           export PYTHONPATH="$PYTHONPATH:./src"
           python3 -m unittest discover -s ./tests -p '*_test.py'
-
-      - name: get-changes
-        id: get-changes
+      - name: install-test
         run: |
-          echo "Cheking changes on src/ .toml and requirements.txt"
-          pkg_changes=$( git diff ${{ github.event.before }} ${{ github.event.after }} --name-only | awk '/^src\// || /^requirements\.txt$/ || /^pyproject\.toml$/' )
-          
-          echo "Changes files: $pkg_changes"
-
-          if [ -z "$pkg_changes" ]; then
-              echo "No package files changed"
-              BUILD_PKG='false'
-          else
-              echo "Detected changes in: $pkg_changes"
-              BUILD_PKG='true'
-          fi
-          echo "pkgbuild=${BUILD_PKG}" >> "$GITHUB_OUTPUT"
-  build:
+          pip3 install -e .
+          yes | pip3 uninstall utils_esantix
+  release:
     needs: test
     runs-on: ubuntu-latest
-    if: ( github.ref == 'refs/heads/main' && needs.test.outputs.pkgbuild == 'true' )
+    if: github.ref == 'refs/heads/main'
+
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Check package changes
+      - name: check-changes
         run: |
           echo "Cheking changes on src/ .toml and requirements.txt"
           pkg_changes=$( git diff ${{ github.event.before }} ${{ github.event.after }} --name-only | awk '/^src\// || /^requirements\.txt$/ || /^pyproject\.toml$/' )
@@ -57,7 +43,8 @@ jobs:
           fi
 
           echo "BUILD_PKG=${BUILD_PKG}" >> $GITHUB_ENV
-      - name: Bump minor version
+      - name: upersion-package
+        if: env.BUILD_PKG == 'true'
         run: |
           version_file=src/sutils/__init__.py
 
@@ -75,14 +62,16 @@ jobs:
           echo "Updating package version to $new_version"
           sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
           BUILD_PKG='true'
-      - name: Commit and push changes
+      - name: commit-changes
+        if: env.BUILD_PKG == 'true'
         run: |
           git config --global user.name 'esantix'
           git config --global user.email 'santiago93echevarria@gmail.com'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git commit -am "Automated bump"
           git push
-      - name: Create Release
+      - name: create-elease
+        if: env.BUILD_PKG == 'true'
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -91,9 +80,7 @@ jobs:
           tag_name: ${{ env.BUILD_PKG_VERSION }}
           release_name: Release ${{ env.BUILD_PKG_VERSION }}
           body: |
-            Installation url
-            ``` 
-            pip3 install git+ssh://git@github.com/esantix/pip-package-template#egg=utils-esantix==${{ env.BUILD_PKG_VERSION }}
-            ```
+            # Install with 
+            pip3 install git+ssh://git@github.com/esantix/pip-package-template#egg=utils-esantix=={{ env.BUILD_PKG_VERSION }}
           draft: false
           prerelease: false
