@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 rm -rf $(dirname $0)/dist
 rm -rf $(dirname $0)/src/utils_esantix.egg-info
 
