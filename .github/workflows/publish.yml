@@ -17,7 +17,8 @@ jobs:
       - name: install-test
         run: |
           pip3 install .
-          instaled=$( pip3 list | awk '/^utils_esantix/' )
+          installed=$( pip3 list | awk '/^utils_esantix/' )
+          echo "Found: $installed"
           if [ -z "installed" ]; then
             echo "utils_esantix not found on pip list"
             exit 1
