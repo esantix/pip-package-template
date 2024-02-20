@@ -78,7 +78,9 @@ jobs:
           tag_name: ${{ env.BUILD_PKG_VERSION }}
           release_name: Release ${{ env.BUILD_PKG_VERSION }}
           body: |
-            # Install with 
-            pip3 install git+ssh://git@github.com/esantix/pip-package-template#egg=utils-esantix=={{ env.BUILD_PKG_VERSION }}
+            Installation url
+            ``` 
+            pip3 install git+ssh://git@github.com/esantix/pip-package-template#egg=utils-esantix==${{ env.BUILD_PKG_VERSION }}
+            ```
           draft: false
           prerelease: false
