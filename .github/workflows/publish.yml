@@ -27,8 +27,7 @@ jobs:
           fetch-depth: 0
       - name: Check package changes
         run: |
-          # git diff ${{ github.event.before }}  ${{ github.event.after }} --name-only | grep '.'
-          changed_files=$( git diff  ${{ github.event.before }} ${{ github.event.after }}  --name-only | grep 'src/')
+          changed_files=$( git diff ${{ github.event.before }} ${{ github.event.after }}  --name-only | grep 'src/' )
           echo "Detected changes in: $changed_files"
 
           if [ -z $changed_files ]; then
