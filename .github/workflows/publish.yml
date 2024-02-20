@@ -7,7 +7,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    outputs:
+      output1: ${{ steps.get-changes.outputs.pkgbuild }}
     steps:
       - uses: actions/checkout@v2
       - name: Unittests
@@ -17,12 +18,17 @@ jobs:
           python3 -m unittest discover -s ./tests -p '*_test.py'
 
           echo "TEST_VAR=sisisi" >> $GITHUB_ENV
+      - name: get-changes
+        id: get-changes
+        run: |
+          AAA="no"
+          echo "pkgbuild=${AAA}" >> "$GITHUB_OUTPUT"
+
 
   build:
     needs: test
     runs-on: ubuntu-latest
-    if: ( github.ref == 'refs/heads/main' && env.TEST_VAR == 'sisisi' )
-
+    if: ( github.ref == 'refs/heads/main' && test.outputs.output1 == 'yes' )
     steps:
       - uses: actions/checkout@v2
         with:
