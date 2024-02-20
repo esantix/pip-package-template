@@ -27,7 +27,6 @@ jobs:
       - name: Bump minor version
         run: |
 
-          git fetch --all
           changed_files=$( git diff HEAD --name-only | grep 'src/\|pyproject.toml\|requirements.txt') # TODO: ignore whitespaces, lines, etcf
 
           if [ -z $changed_files ]; then
