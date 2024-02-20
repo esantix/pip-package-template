@@ -27,8 +27,9 @@ jobs:
           fetch-depth: 0
       - name: Check package changes
         run: |
+          git diff ${{ github.event.before }}  ${{ github.event.after }} --name-only | grep '.'
+          
           changed_files=$( git diff  ${{ github.event.before }} --name-only | grep 'src/\|pyproject.toml\|requirements.txt')
-          git diff  ${{ github.event.before }} --name-only | grep '.'
 
 
           if [ -z $changed_files ]; then
