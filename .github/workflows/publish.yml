@@ -16,7 +16,7 @@ jobs:
           python3 -m unittest discover -s ./tests -p '*_test.py'
       - name: install-test
         run: |
-          pip3 install -e .
+          pip3 install .
           yes | pip3 uninstall utils_esantix
   release:
     needs: test
