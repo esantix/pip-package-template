@@ -16,11 +16,13 @@ jobs:
           python3 -m unittest discover -s ./tests -p '*_test.py'
       - name: install-test
         run: |
+          python3 -m build
           pip3 install .
           installed=$( pip3 list | awk '/^utils_esantix/' )
           echo "Found: $installed"
           if [ -z "$installed" ]; then
             echo "utils_esantix not found on pip list"
+            pip3 list
             exit 1
           fi
           yes | pip3 uninstall utils_esantix
@@ -76,7 +78,7 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git commit -am "Automated bump"
           git push
-      - name: create-elease
+      - name: create-release
         if: env.BUILD_PKG == 'true'
         id: create_release
         uses: actions/create-release@v1
