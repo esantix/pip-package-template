@@ -25,9 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Bump minor version
+        env:
+          changed_files: ${{ steps.changed-files.outputs.all_changed_files }} 
         run: |
-
-          changed_files=$( git diff HEAD --name-only | grep 'src/\|pyproject.toml\|requirements.txt') # TODO: ignore whitespaces, lines, etcf
 
           if [ -z $changed_files ]; then
               echo "No package files changed"
