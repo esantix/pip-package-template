@@ -1,7 +1,7 @@
 # pip-package-example
 [![Pubish package](https://github.com/esantix/pip-package-template/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/esantix/pip-package-template/actions/workflows/publish.yml)
 
- This repo contains a template for building and releasing python packages
+ This repository contains a python package template with automated tests and releases
 
 ## Package usage
 ### Installation
@@ -13,8 +13,11 @@ pip3 install git+ssh://git@github.com/esantix/pip-package-template#egg=utils-esa
 
 
 ```python
-from sutils.math import increase
-increase(1)
+import sutils
+
+number=1
+increased = sutils.math.increase(number)
+
 ```
 
 ## Deploy (Actions)
