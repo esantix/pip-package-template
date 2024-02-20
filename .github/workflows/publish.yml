@@ -24,10 +24,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Check package changes
-        with:
-          fetch-depth: 2
         run: |
-          changed_files=$(git diff --name-only ${{ github.event.before }} | grep 'src/\|pyproject.toml\|requirements.txt')
+          changed_files=$(git diff  ${{ github.event.before }} --name-only | grep 'src/\|pyproject.toml\|requirements.txt')
   
           if [ -z $changed_files ]; then
               echo "No package files changed"
