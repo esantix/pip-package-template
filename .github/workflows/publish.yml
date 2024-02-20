@@ -27,8 +27,8 @@ jobs:
           fetch-depth: 0
       - name: Check package changes
         run: |
-          git diff ${{ github.event.before }}  ${{ github.event.after }} --name-only | grep '.'
-          changed_files=$( git diff  ${{ github.event.before }} ${{ github.event.after }}  --name-only | grep 'src/\|pyproject.toml\|requirements.txt')
+          # git diff ${{ github.event.before }}  ${{ github.event.after }} --name-only | grep '.'
+          changed_files=$( git diff  ${{ github.event.before }} ${{ github.event.after }}  --name-only | grep 'src/')
           echo "Detected changes in: $changed_files"
 
           if [ -z $changed_files ]; then
@@ -39,7 +39,7 @@ jobs:
               BUILD_PKG='true'
           fi
 
-          echo "BUILD_PKG=${IMAGE}" >> $GITHUB_ENV
+          echo "BUILD_PKG=${BUILD_PKG}" >> $GITHUB_ENV
 
 
       - name: Bump minor version
