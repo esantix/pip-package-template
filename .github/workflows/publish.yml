@@ -31,12 +31,13 @@ jobs:
           echo "Detected changes in: $changed_files"
 
           pkg_changes=$(echo $changed_files | grep 'src/')
+          echo $pkg_changes
 
-          if [ -z $changed_files ]; then
+          if [[ -z $pkg_changes ]]; then
               echo "No package files changed"
               BUILD_PKG='false'
           else
-              echo "Detected changes in: $changed_files"
+              echo "Detected changes in: $pkg_changes"
               BUILD_PKG='true'
           fi
 
