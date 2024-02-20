@@ -19,7 +19,7 @@ jobs:
           pip3 install .
           installed=$( pip3 list | awk '/^utils_esantix/' )
           echo "Found: $installed"
-          if [ -z "installed" ]; then
+          if [ -z "$installed" ]; then
             echo "utils_esantix not found on pip list"
             exit 1
           fi
