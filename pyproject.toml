@@ -28,4 +28,4 @@ version = {attr = "sutils.__version__"}
 dependencies = { file = ["requirements.txt"]}
 
 [project.urls]
-Homepage = "https://github.com"
+Homepage = "https://github.com/esantix/pip-package-template"
