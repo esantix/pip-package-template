@@ -8,7 +8,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.get-changes.outputs.pkgbuild }}
+      pkgbuild: ${{ steps.get-changes.outputs.pkgbuild }}
     steps:
       - uses: actions/checkout@v2
       - name: Unittests
@@ -17,18 +17,26 @@ jobs:
           export PYTHONPATH="$PYTHONPATH:./src"
           python3 -m unittest discover -s ./tests -p '*_test.py'
 
-          echo "TEST_VAR=sisisi" >> $GITHUB_ENV
       - name: get-changes
         id: get-changes
         run: |
-          AAA="yes"
-          echo "pkgbuild=${AAA}" >> "$GITHUB_OUTPUT"
+          echo "Cheking changes on src/ .toml and requirements.txt"
+          pkg_changes=$( git diff ${{ github.event.before }} ${{ github.event.after }} --name-only | awk '/^src\// || /^requirements\.txt$/ || /^pyproject\.toml$/' )
+          
+          echo "Changes files: $pkg_changes"
 
-
+          if [ -z "$pkg_changes" ]; then
+              echo "No package files changed"
+              BUILD_PKG='false'
+          else
+              echo "Detected changes in: $pkg_changes"
+              BUILD_PKG='true'
+          fi
+          echo "pkgbuild=${BUILD_PKG}" >> "$GITHUB_OUTPUT"
   build:
     needs: test
     runs-on: ubuntu-latest
-    if: ( github.ref == 'refs/heads/main' && needs.test.outputs.output1 == 'yes' )
+    if: ( github.ref == 'refs/heads/main' && needs.test.outputs.pkgbuild == 'true' )
     steps:
       - uses: actions/checkout@v2
         with:
@@ -50,7 +58,6 @@ jobs:
 
           echo "BUILD_PKG=${BUILD_PKG}" >> $GITHUB_ENV
       - name: Bump minor version
-        if: env.BUILD_PKG == 'true'
         run: |
           version_file=src/sutils/__init__.py
 
@@ -69,7 +76,6 @@ jobs:
           sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
           BUILD_PKG='true'
       - name: Commit and push changes
-        if: env.BUILD_PKG == 'true'
         run: |
           git config --global user.name 'esantix'
           git config --global user.email 'santiago93echevarria@gmail.com'
@@ -77,7 +83,6 @@ jobs:
           git commit -am "Automated bump"
           git push
       - name: Create Release
-        if: env.BUILD_PKG == 'true'
         id: create_release
         uses: actions/create-release@v1
         env:
