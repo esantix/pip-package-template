@@ -42,8 +42,6 @@ jobs:
           fi
 
           echo "BUILD_PKG=${BUILD_PKG}" >> $GITHUB_ENV
-
-
       - name: Bump minor version
         if: env.BUILD_PKG == 'true'
         run: |
@@ -58,11 +56,11 @@ jobs:
           new_minor_version="$(( $minor_version + 1 ))"
 
           new_version="$major_version.$new_minor_version"
+          echo "BUILD_PKG_VERSION=${new_version}" >> $GITHUB_ENV
 
           echo "Updating package version to $new_version"
           sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
           BUILD_PKG='true'
-
       - name: Build
         if: env.BUILD_PKG == 'true'
         run: |
@@ -85,3 +83,13 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git commit -am "Automated bump"
           git push
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ env.BUILD_PKG_VERSION }}
+          draft: false
+          prerelease: false
