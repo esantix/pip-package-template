@@ -3,7 +3,7 @@ name: Pubish package
 on:
   push:
     branches:
-      - develop
+      - '*'
       - master
 jobs:
   test:
