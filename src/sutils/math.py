@@ -1,3 +1,4 @@
+"""Math utils"""
 
 def increase(a, amount=1):
     """Increase number by certain amount"""
