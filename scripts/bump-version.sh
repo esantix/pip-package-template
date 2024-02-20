@@ -18,3 +18,4 @@ fi
 
 echo "Updating package version to $new_version"
 sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
+ 
