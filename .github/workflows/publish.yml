@@ -21,7 +21,7 @@ jobs:
       - name: get-changes
         id: get-changes
         run: |
-          AAA="no"
+          AAA="yes"
           echo "pkgbuild=${AAA}" >> "$GITHUB_OUTPUT"
 
 
