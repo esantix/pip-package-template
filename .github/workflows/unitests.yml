@@ -1,0 +1,19 @@
+name: Unit tests
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Unittests
+        run: |
+          pip3 install -r requirements.test.txt
+          export PYTHONPATH="$PYTHONPATH:./src"
+          python3 -m unitteest discover -s ./tests -p '*_test.py'
+          
