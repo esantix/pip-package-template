@@ -22,12 +22,14 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Check package changes
-        env:
-          changed_files: ${{ steps.changed-files.outputs.all_changed_files }}
+        with:
+          fetch-depth: 0
         run: |
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep 'src/\|pyproject.toml\|requirements.txt')
+  
           if [ -z $changed_files ]; then
               echo "No package files changed"
               BUILD_PKG='false'
@@ -37,6 +39,7 @@ jobs:
           fi
 
           echo "BUILD_PKG=${IMAGE}" >> $GITHUB_ENV
+
 
       - name: Bump minor version
         if: env.BUILD_PKG == 'true'
