@@ -16,6 +16,7 @@ jobs:
           python3 -m unittest discover -s ./tests -p '*_test.py'
       - name: install-test
         run: |
+          pip3 install -r requirements.build.txt
           python3 -m build
           pip3 install .
           installed=$( pip3 list | awk '/^utils_esantix/' )
