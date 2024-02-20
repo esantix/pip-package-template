@@ -46,7 +46,7 @@ jobs:
         run: |
           version_file=src/sutils/__init__.py
 
-          latest=$( curl https://gitlab.com/api/v4/projects/55057510/packages | jq '.[-1].version' | tr -d '"')
+          latest=$( git describe --tags --abbrev=0 )
           echo "Latest version $latest"
 
           major_version=$(echo $latest | cut -d "." -f 1 )
@@ -60,20 +60,6 @@ jobs:
           echo "Updating package version to $new_version"
           sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
           BUILD_PKG='true'
-      - name: Build
-        if: env.BUILD_PKG == 'true'
-        run: |
-          python3 -m pip install --upgrade build
-          python3 -m build
-      - name: Publish
-        if: env.BUILD_PKG == 'true'
-        env:
-          DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
-          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-          REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-        run: |
-          python3 -m pip install --upgrade twine
-          python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository-url $REGISTRY_URL dist/*
       - name: Commit and push changes
         if: env.BUILD_PKG == 'true'
         run: |
@@ -92,6 +78,7 @@ jobs:
           tag_name: ${{ env.BUILD_PKG_VERSION }}
           release_name: Release ${{ env.BUILD_PKG_VERSION }}
           body: |
-            https://gitlab.com/esantix/esantix-packages/-/packages
+            # Install with 
+            pip3 install git+ssh://git@github.com/esantix/pip-package-template#egg=utils-esantix=={{ env.BUILD_PKG_VERSION }}
           draft: false
           prerelease: false
