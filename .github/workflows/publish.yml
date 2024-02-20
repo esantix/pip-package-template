@@ -27,13 +27,12 @@ jobs:
           fetch-depth: 0
       - name: Check package changes
         run: |
-          changed_files=$( git diff ${{ github.event.before }} ${{ github.event.after }} --name-only )
-          echo "Detected changes in: $changed_files"
+          echo "Cheking changes on src/ .toml and requirements.txt"
+          pkg_changes=$( git diff ${{ github.event.before }} ${{ github.event.after }} --name-only | awk '/^src\// || /^requirements\.txt$/ || /^pyproject\.toml$/' )
+          
+          echo "Changes files: $pkg_changes"
 
-          pkg_changes=$( echo $changed_files | awk '/^src\// || /^requirements\.txt$/ || /^pyproject\.toml$/' )
-          echo $pkg_changes
-
-          if [ -z $pkg_changes ]; then
+          if [ -z "$pkg_changes" ]; then
               echo "No package files changed"
               BUILD_PKG='false'
           else
