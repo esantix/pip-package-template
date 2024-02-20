@@ -31,6 +31,7 @@ jobs:
 
           if [ -z $changed_files ]; then
               echo "No package files changed"
+              BUILD_PKG='false'
               exit 0
           else
               echo "Detected changes in: $changed_files"
@@ -49,18 +50,18 @@ jobs:
             
               echo "Updating package version to $new_version"
               sed -i "s/__version__ = \".*\"/__version__ = \"$new_version\"/g" $version_file
-
-
-
+              BUILD_PKG='true'
           fi
 
-
+          echo "BUILD_PKG=${IMAGE}" >> $GITHUB_ENV
 
       - name: Build
+        if: env.BUILD_PKG == 'true'
         run: |
           python3 -m pip install --upgrade build
           python3 -m build
       - name: Publish
+        if: env.BUILD_PKG == 'true'
         env: 
            DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
            DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
@@ -69,6 +70,7 @@ jobs:
           python3 -m pip install --upgrade twine
           python3 -m twine upload -u $DEPLOY_USERNAME -p $DEPLOY_TOKEN --repository-url $REGISTRY_URL dist/*
       - name: Commit and push changes
+        if: env.BUILD_PKG == 'true'
         run: | 
           git config --global user.name 'esantix'
           git config --global user.email 'santiago93echevarria@gmail.com'
